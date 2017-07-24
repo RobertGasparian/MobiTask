@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MobiTask</string>
+    <string name="station_name">Station Name:</string>
+    <string name="next_departure">Next Departure:</string>
+</resources>

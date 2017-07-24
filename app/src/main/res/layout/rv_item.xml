@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/station_map"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_report_image"
+        />
+
+    <TextView
+        android:id="@+id/station_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/station_name"
+        android:textSize="16sp"
+        android:textColor="@color/mainGrey"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_station_name"
+        android:layout_below="@id/station_name"
+        android:text="Current Name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/mainBlack"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/departure_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_station_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/next_departure"
+        android:textSize="10sp"
+        android:textColor="@color/mainGrey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/next_departure"
+        android:layout_below="@id/departure_time"
+        android:text="HH-MM-SS"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/mainBlack"
+        android:textSize="20sp"/>
+
+
+</RelativeLayout>
