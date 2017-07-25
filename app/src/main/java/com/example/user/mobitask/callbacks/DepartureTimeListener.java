@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface DepartureTimeListener {
 
-    public void setDepartureTimes(List<String> times);
+    public void setDepartureTimes(String times);
 }

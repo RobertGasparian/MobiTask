@@ -12,6 +12,6 @@ import retrofit2.http.Query;
 
 public interface SwissStations {
 
-    @GET("v1/locations?")
-    Call<StationList> getList(@Query("stations") String stations);
+    @GET("v1/locations?query=Bern*")
+    Call<StationList> getList();
 }

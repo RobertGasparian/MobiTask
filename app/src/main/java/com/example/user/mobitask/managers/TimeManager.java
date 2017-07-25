@@ -26,48 +26,36 @@ public class TimeManager {
 
 
         long currentMillis=System.currentTimeMillis();
-        long delta=departureTime-currentMillis;
+        long delta=(departureTime*1000)-currentMillis;
         return delta;
 
     }
 
-    public long getNextDeparture(long...delta){
 
-        long minDelta=0;
-
-        for (int i = 0; i < delta.length; i++) {
-
-            if(minDelta>delta[i]){
-                minDelta=delta[i];
-            }
-
-        }
-
-        return minDelta;
-
-    }
 
     public String convert(long timeStamp){
+
+        long timeStampSeconds=timeStamp;
 
         long minute=60;
         long hour=3600;
 
-        long currentMinute=0,currentHour=0, currentSecontds=0;
+        long currentMinute=0,currentHour=0, currentSeconds=0;
 
-        currentHour=timeStamp/hour;
-        currentMinute=(timeStamp%hour)/minute;
-        currentSecontds=(timeStamp%hour)%minute;
+        currentHour=timeStampSeconds/hour;
+        currentMinute=(timeStampSeconds%hour)/minute;
+        currentSeconds=(timeStampSeconds%hour)%minute;
 
         String convertedTime="";
         if(currentHour!=0){
-            convertedTime=convertedTime+currentHour+" hour(s)";
+            convertedTime=convertedTime+currentHour+" hour(s) ";
         }
 
         if(currentMinute!=0){
-            convertedTime=convertedTime+currentMinute+" minute(s)";
+            convertedTime=convertedTime+currentMinute+" minute(s) ";
         }
         if(currentHour!=0){
-            convertedTime=convertedTime+currentSecontds+" second(s)";
+            convertedTime=convertedTime+currentSeconds+" second(s)";
         }
 
         return convertedTime;

@@ -5,10 +5,8 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.user.mobitask.R;
-import com.example.user.mobitask.adapters.TaskAdapter;
 import com.example.user.mobitask.callbacks.DepartureTimeListener;
 import com.example.user.mobitask.callbacks.RefreshCallback;
-import com.example.user.mobitask.callbacks.StationListListener;
 import com.example.user.mobitask.models.StationBoardList;
 import com.example.user.mobitask.models.Stationboard;
 import com.example.user.mobitask.retrofit_interfaces.DepartureTimer;
@@ -24,12 +22,11 @@ import retrofit2.Response;
  * Created by User on 7/24/2017.
  */
 
-public class DepartureTimeManager implements StationListListener {
+public class DepartureTimeManager {
 
 
     private List<String> stations = new ArrayList<>();
     private List<Stationboard> stationBoardList = new ArrayList<>();
-    private List<String> departureTimes = new ArrayList<>();
     private DepartureTimer departureTimer;
     private DepartureTimeListener timeListener;
     private int currentPosition = 0;
@@ -37,7 +34,23 @@ public class DepartureTimeManager implements StationListListener {
     private RetrofitController retrofitController;
     private TimeManager timeManager;
     private Context context;
-    private RefreshCallback refreshCallback;
+    private List<RefreshCallback> refreshCallbacks=new ArrayList<>();
+    private static DepartureTimeManager instance=null;
+
+
+
+    private DepartureTimeManager(){
+    }
+
+
+    public static DepartureTimeManager getDepartureTimeManager(){
+
+        if(instance==null){
+            instance=new DepartureTimeManager();
+        }
+
+        return instance;
+    }
 
 
     public void requestHandler() {
@@ -45,23 +58,22 @@ public class DepartureTimeManager implements StationListListener {
         timeManager = TimeManager.getTimeManager();
         retrofitController = RetrofitController.getRetrofitController();
         retrofitController.retrofitInit();
-
+        departureTimer=retrofitController.getmRetrofit().create(DepartureTimer.class);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-
-                if (currentPosition <= stationBoardList.size()) {
-                    currentStation = stations.get(currentPosition++);
+                if (currentPosition < stations.size()&&stations.size()!=0) {
+                    currentStation = stations.get(currentPosition);
                     departureTimer.getDepartureTime(currentStation).enqueue(new Callback<StationBoardList>() {
                         @Override
                         public void onResponse(Call<StationBoardList> call, Response<StationBoardList> response) {
                             stationBoardList.addAll(response.body().getStationboard());
                             long time = timeManager.getDepartureTimeDelta(stationBoardList.get(currentPosition).getStop().getDepartureTimestamp());
                             String currentTime = timeManager.convert(time);
-                            departureTimes.add(currentTime);
-                            timeListener.setDepartureTimes(departureTimes);
+                            timeListener.setDepartureTimes(currentTime);
+                            currentPosition++;
                             requestHandler();
 
 
@@ -79,13 +91,17 @@ public class DepartureTimeManager implements StationListListener {
 
                 }
                 else {
-                    currentPosition=0;
+                    Handler handler=new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                          refreshCallback.onRefreshCallback();
+                            for (RefreshCallback refreshCallback: refreshCallbacks
+                                 ) {
+                                refreshCallback.onRefreshCallback();
+                            }
                         }
-                    },30000);
+                    },10000);
+                    currentPosition=0;
                 }
             }
         }, 340);
@@ -94,10 +110,17 @@ public class DepartureTimeManager implements StationListListener {
     }
 
 
-    @Override
+
     public void getStationList(List<String> list, Context context) {
         stations = list;
         this.context=context;
-        requestHandler();
+    }
+
+    public void addRefreshCallback(RefreshCallback refreshCallback) {
+        this.refreshCallbacks.add(refreshCallback);
+    }
+
+    public void setTimeListener(DepartureTimeListener timeListener) {
+        this.timeListener = timeListener;
     }
 }

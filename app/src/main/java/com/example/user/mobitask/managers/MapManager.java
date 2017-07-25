@@ -24,7 +24,7 @@ public class MapManager {
 
     public String getMapImage(String latitude, String longitude){
 
-        String url = "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=10&size=120x120&sensor=false";
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=15&size=120x120&sensor=false";
 
         return url;
 

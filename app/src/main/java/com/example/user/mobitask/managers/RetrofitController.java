@@ -36,4 +36,7 @@ public class RetrofitController {
 
     }
 
+    public Retrofit getmRetrofit() {
+        return mRetrofit;
+    }
 }
