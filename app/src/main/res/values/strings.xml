@@ -2,4 +2,6 @@
     <string name="app_name">MobiTask</string>
     <string name="station_name">Station Name:</string>
     <string name="next_departure">Next Departure:</string>
+    <string name="loading">Loading...</string>
+    <string name="inet_fail">Failure, please check your internet connection and try again</string>
 </resources>

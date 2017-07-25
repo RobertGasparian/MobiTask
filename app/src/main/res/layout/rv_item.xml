@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/next_departure"
         android:layout_below="@id/departure_time"
-        android:text="HH-MM-SS"
+        android:text="@string/loading"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="3dp"
         android:textColor="@color/mainBlack"

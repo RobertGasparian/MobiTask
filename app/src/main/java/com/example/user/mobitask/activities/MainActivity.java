@@ -8,7 +8,9 @@ import android.widget.Toast;
 
 import com.example.user.mobitask.R;
 import com.example.user.mobitask.adapters.TaskAdapter;
+import com.example.user.mobitask.callbacks.RefreshCallback;
 import com.example.user.mobitask.callbacks.StationListListener;
+import com.example.user.mobitask.managers.RetrofitController;
 import com.example.user.mobitask.models.Station;
 import com.example.user.mobitask.models.StationList;
 import com.example.user.mobitask.retrofit_interfaces.SwissStations;
@@ -19,24 +21,21 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RefreshCallback {
 
 
     private RecyclerView mTaskRv;
     private TaskAdapter mAdapter;
     private List<Station> mList;
-    private Retrofit mRetrofit;
-    private SwissStations baselStations;
+    private RetrofitController retrofitController;
+    private SwissStations swissStations;
     private StationListListener stationListListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        retrofitInit();
         init();
 
 
@@ -44,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
 
+
+        retrofitController=RetrofitController.getRetrofitController();
+        retrofitController.retrofitInit();
         mTaskRv=(RecyclerView)findViewById(R.id.task_rv);
         mList=new ArrayList<>();
         mList=getData();
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Station> getData(){
 
         final List<Station> list=new ArrayList<>();
-       baselStations.getList("Basel*").enqueue(new Callback<StationList>() {
+       swissStations.getList("Basel*").enqueue(new Callback<StationList>() {
 
             @Override
             public void onResponse(Call<StationList> call, Response<StationList> response) {
@@ -80,21 +82,15 @@ public class MainActivity extends AppCompatActivity {
                 list) {
             strings.add(station.getName());
         }
-        stationListListener.getStationList(strings);
+        stationListListener.getStationList(strings, this);
 
         return list;
 
     }
 
-    private void retrofitInit(){
-
-
-        mRetrofit=new Retrofit.Builder()
-                .baseUrl("http://transport.opendata.ch/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        baselStations = mRetrofit.create(SwissStations.class);
-
+    @Override
+    public void onRefreshCallback() {
+        mList.clear();
+        mList=getData();
     }
-
 }

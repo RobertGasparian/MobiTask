@@ -11,27 +11,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.user.mobitask.R;
+import com.example.user.mobitask.callbacks.DepartureTimeListener;
 import com.example.user.mobitask.managers.MapManager;
 import com.example.user.mobitask.managers.TimeManager;
 import com.example.user.mobitask.models.Station;
 import com.example.user.mobitask.models.StationList;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder>{
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> implements DepartureTimeListener{
 
 
     private List<Station> mList;
+    private List<String> mTimeList;
     private Context mContext;
     private MapManager mMapManager;
-    private TimeManager mTimeManager;
     private long test;
 
     public TaskAdapter(List<Station> mList, Context mContext) {
 
         this.mList = mList;
         this.mContext = mContext;
+        mTimeList=new ArrayList<>();
 
     }
 
@@ -56,8 +59,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder>{
                 .into(holder.mapImage);
 
         holder.stationName.setText(station.getName());
+        if(position<=mTimeList.size()){
+            holder.time.setText(mTimeList.get(position));
+        }
 
-        mTimeManager=TimeManager.getTimeManager();
 
 
 
@@ -70,6 +75,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder>{
 
         return mList.size();
 
+    }
+
+    @Override
+    public void setDepartureTimes(List<String> times) {
+
+        notifyDataSetChanged();
     }
 
     class TaskHolder extends RecyclerView.ViewHolder{

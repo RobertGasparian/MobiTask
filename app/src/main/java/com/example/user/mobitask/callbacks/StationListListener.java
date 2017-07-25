@@ -1,5 +1,7 @@
 package com.example.user.mobitask.callbacks;
 
+import android.content.Context;
+
 import java.util.List;
 
 /**
@@ -8,5 +10,5 @@ import java.util.List;
 
 public interface StationListListener {
 
-    public void getStationList(List<String> list);
+    public void getStationList(List<String> list, Context context);
 }
